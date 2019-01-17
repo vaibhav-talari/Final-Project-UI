@@ -96,13 +96,18 @@
   </form>
 </div>
 <br>
+<div class="alert alert-success text-center" role="alert" *ngIf="isParentTaskSaved&&!onClickisUpdated">
+  Parent Saved Successfully 
+</div>
+
+<br>
 
 <div *ngIf="users" class="text-left modal fade" id="modalusers" tabindex="-1" role="dialog" aria-labelledby="modalusers"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalusers">Modal title</h5>
+        <h5 class="modal-title" id="modalusers">Select User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -137,7 +142,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalproject">Modal title</h5>
+        <h5 class="modal-title" id="modalproject">Select Project</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -162,7 +167,7 @@
               <p>{{one.user?.firstName}}</p>
             </div>
             <div class="col col-md-3">
-              <button type="button" class="btn btn-primary" (click)="selectedproject(one)">Select</button>
+              <button type="button" *ngIf="!one.suspend" class="btn btn-primary" (click)="selectedproject(one)">Select</button>
             </div>
           </div>
         </form>
@@ -176,7 +181,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalparenttask">Modal title</h5>
+        <h5 class="modal-title" id="modalparenttask">Select Parent Task</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -225,8 +230,8 @@
 <hr>
 
 <form>
-  <div class="row" *ngFor="let one of childTask | filterBy:userFilter | orderBy :order">
-    <div class="col col-md-1">
+  <div class="row"   *ngFor="let one of childTask | filterBy:userFilter | orderBy :order">
+    <div  class="col col-md-1">
       <label class="font-weight-bold text-monospace">Task Name:</label>
       <p>{{one.childTaskName}}</p>
     </div>
@@ -243,22 +248,26 @@
       <p>{{one.taskPriority}}</p>
     </div>
     <div class="col col-md-1">
-        <label class="font-weight-bold text-monospace">Parent Task:</label>
-        <p>{{one.parent.parentTaskName}}</p>
-      </div>
-      <div class="col col-md-1">
-          <label class="font-weight-bold text-monospace">Project Name:</label>
-          <p>{{one.project.projectName}}</p>
-        </div>
+      <label class="font-weight-bold text-monospace">Parent Task:</label>
+      <p>{{one.parent?.parentTaskName}}</p>
+    </div>
+    <div class="col col-md-1">
+      <label class="font-weight-bold text-monospace">Project Name:</label>
+      <p>{{one.project?.projectName}}</p>
+      <p class="redcolor" *ngIf="!one.project.suspend">{{(one.project?.suspend)?'Completed':'Active'}}</p>
+      <p class="greencolor" *ngIf="one.project.suspend">{{(one.project?.suspend)?'Completed':'Active'}}</p>
+
+    </div>
     <div class="col col-md-1">
       <label class="font-weight-bold text-monospace">User:</label>
-      <p>{{one.user.firstName}}</p>
+      <p>{{one.user?.firstName}}</p>
     </div>
     <div class="col col-md-1">
-      <button *ngIf=!one.taskStatus class="badge badge-primary" (click)="onClickUpdateTask(one)"> Edit</button>
+      <button *ngIf="!one.taskStatus" class="badge badge-primary" (click)="onClickUpdateTask(one)"> Edit</button>
     </div>
     <div class="col col-md-1">
-      <button class="badge badge-danger" (click)="SuspendChildTask(one.childTaskID)">Suspend</button>
+      <button *ngIf="!one.taskStatus" class="badge badge-danger" (click)="SuspendChildTask(one.childTaskID)">Suspend</button>
+      <button *ngIf="one.taskStatus" class="badge badge-success" >Completed</button>
     </div>
   </div>
 </form>

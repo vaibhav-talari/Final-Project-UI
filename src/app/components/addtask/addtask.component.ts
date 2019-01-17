@@ -71,6 +71,7 @@ export class AddtaskComponent implements OnInit {
     this.addParentTaskForm = this.formBuilder.group({
       parentTaskName: ['']
     });
+    if(!this.isParentTaskSaved){
     this.addTaskForm = this.formBuilder.group({
       childTaskName: [null, Validators.required],
       taskStartDate: ['', Validators.required],
@@ -81,6 +82,18 @@ export class AddtaskComponent implements OnInit {
       user: [null, Validators.required],
       parent: [null, Validators.required]
     });
+  }else{
+    this.addTaskForm = this.formBuilder.group({
+      childTaskName: [null],
+      taskStartDate: [''],
+      taskEndDate: [''],
+      taskPriority: ['1'],
+      taskStatus: ['false'],
+      project: [null],
+      user: [null],
+      parent: [null]
+    });
+  }
   }
 
   get childtaskerror() { return this.addTaskForm.controls; }
@@ -157,7 +170,7 @@ export class AddtaskComponent implements OnInit {
   onClickUpdateTask(child) {
     this.addTaskForm = this.formBuilder.group({
         childTaskID:[child.childTaskID],
-        childTaskName: [child.childTaskID],
+        childTaskName: [child.childTaskName],
         taskStartDate: [child.taskStartDate],
         taskEndDate: [child.taskEndDate],
         taskPriority: [child.taskPriority],
@@ -173,7 +186,7 @@ export class AddtaskComponent implements OnInit {
       .subscribe((child) => {
         this.addTaskForm = this.formBuilder.group({
           childTaskID:[child.childTaskID],
-          childTaskName: [child.childTaskID],
+          childTaskName: [child.childTaskName],
           taskStartDate: [child.taskStartDate],
           taskEndDate: [child.taskEndDate],
           taskPriority: [child.taskPriority],

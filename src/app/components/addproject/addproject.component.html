@@ -67,7 +67,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="updatemodeltitle">Modal title</h5>
+        <h5 class="modal-title" id="updatemodeltitle">Select User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -177,10 +177,12 @@
       <button *ngIf=!one.suspend class="badge badge-primary" (click)="onClickUpdateProject(one)"> Edit</button>
     </div>
     <div class="col col-md-1">
-      <button class="badge badge-danger" (click)="SuspendProject(one.projectID)">Suspend</button>
+      <button *ngIf=!one.suspend  class="badge badge-danger" (click)="SuspendProject(one.projectID)">{{ (one.suspend) ? 'Complete' : 'Suspend' }}</button>
+      <button *ngIf=one.suspend  class="badge badge-success" >{{ (one.suspend) ? 'Completed' : 'Suspend' }}</button>
+
     </div>
     <div class="col col-md-1">
-      <button class="badge badge-danger" (click)="loadTask(one.projectID)">Tasks</button>
+      <button *ngIf=!one.suspend class="badge badge-danger" (click)="loadTask(one.projectID)">Tasks</button>
     </div>
   </div>
 </form>
