@@ -1,0 +1,264 @@
+<div>
+  <h2 style="text-align: center">Add Task</h2>
+  <hr>
+  <form [formGroup]="addTaskForm" (ngSubmit)="SubmitForm()">
+    <div class="form-group">
+      <label>Project:</label>
+      <div class="form-row align-items-center">
+        <div class="col col-md-3">
+          {{addTaskForm.value.project?.projectName}}
+        </div>
+        <div *ngIf=!onClickisUpdated class="col-auto my-1">
+          <input (click)="loadProjects()" *ngIf="!isDisabled" type="button" class="btn btn-primary" value="Search">
+          <div class="redcolor form-group">
+            <div *ngIf="addTaskForm.controls.project.invalid">*Select Project</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Task:</label>
+      <input type="text" class="form-control" formControlName="childTaskName" [ngClass]="{ 'is-invalid': submitted && childtaskerror.childTaskName.errors }"
+        placeholder="Enter Task">
+      <div *ngIf="submitted && childtaskerror.childTaskName.errors" class="invalid-feedback">
+        <div *ngIf="childtaskerror.childTaskName.errors.required">Project Name is required</div>
+      </div>
+    </div>
+    <div *ngIf=!onClickisUpdated class="form-row align-items-center">
+      <div class="col-auto">
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" (click)="triggerSomeEvent()">
+          <label class="form-check-label" for="autoSizingCheck">
+            Set Parent
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group slidecontainer">
+      <label>Priority:</label>
+      {{addTaskForm.value.taskPriority}}
+      <input type="range" min="1" max="30" formControlName="taskPriority" class="form-control slider" placeholder="Enter Priority">
+    </div>
+    <div class="form-group">
+      <label>Parent Task:</label>
+      <div class="form-row align-items-center">
+        <div class="col col-md-3">
+          <p>
+            {{addTaskForm.value.parent?.parentTaskName}}
+          </p>
+        </div>
+        <div *ngIf=!onClickisUpdated class="col-auto my-1">
+          <input (click)="loadParentTasks()" *ngIf="!isDisabled" type="button" class="btn btn-primary" value="Search">
+          <div class="redcolor form-group">
+            <div *ngIf="addTaskForm.controls.parent.invalid">*Select Parent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group form-row align-items-center">
+      <div class="col-auto">
+        <label>Start Date:</label>
+        <input type="date" class="form-control" formControlName="taskStartDate" value="{{startDate | date:'yyyy-MM-dd'}}"
+          [ngClass]="{ 'is-invalid': submitted && childtaskerror.taskStartDate.errors }" min="{{startDate | date:'yyyy-MM-dd'}}">
+        <div *ngIf="submitted && childtaskerror.taskStartDate.errors" class="invalid-feedback">
+          <div *ngIf="childtaskerror.taskStartDate.errors.required">Select Start Date</div>
+        </div>
+      </div>
+      <div class="col-auto">
+        <label>End Date:</label>
+        <input type="date" class="form-control" formControlName="taskEndDate" value="{{endDate | date:'yyyy-MM-dd'}}"
+          [ngClass]="{ 'is-invalid': submitted && childtaskerror.taskEndDate.errors }" min="{{endDate | date:'yyyy-MM-dd'}}">
+        <div *ngIf="submitted && childtaskerror.taskEndDate.errors" class="invalid-feedback">
+          <div *ngIf="childtaskerror.taskEndDate.errors.required">Select End Date</div>
+          <div *ngIf="addTaskForm.controls.taskEndDate.invalid">Not Allowed</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>User:</label>
+      <div class="form-row align-items-center">
+        <div class="col col-md-3">
+          <p>
+            {{addTaskForm.value.user?.firstName}}</p>
+        </div>
+        <div *ngIf=!onClickisUpdated class="col-auto my-1">
+          <input (click)="loadUsers()" *ngIf="!isDisabled" type="button" class="btn btn-primary" value="Search">
+          <div class="redcolor form-group">
+            <div *ngIf="addTaskForm.controls.user.invalid">*Select User</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button type="submit" *ngIf=!onClickisUpdated class="btn btn-primary btn-lg btn-block">Submit</button>
+    <button type="Update" *ngIf=onClickisUpdated class="btn btn-primary btn-lg btn-block">Update</button>
+    <button type="reset" class="btn btn-secondary btn-lg btn-block">Reset</button>
+  </form>
+</div>
+<br>
+
+<div *ngIf="users" class="text-left modal fade" id="modalusers" tabindex="-1" role="dialog" aria-labelledby="modalusers"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalusers">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row" *ngFor="let one of users">
+            <div class="col col-md-3">
+              <label class="font-weight-bold text-monospace">First Name:</label>
+              <p>{{one.firstName}}</p>
+            </div>
+            <div class="col col-md-3">
+              <label class="font-weight-bold text-monospace">Last Name:</label>
+              <p>{{one.lastName}}</p>
+            </div>
+            <div class="col col-md-3">
+              <label class="font-weight-bold text-monospace">Employee ID:</label>
+              <p>{{one.employeeID}}</p>
+            </div>
+            <div class="col col-md-3">
+              <button type="button" class="btn btn-primary" (click)="selecteduser(one)">Select</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="projects" class="text-left modal fade" id="modalproject" tabindex="-1" role="dialog" aria-labelledby="modalproject"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalproject">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row" *ngFor="let one of projects">
+            <div class="col col-md-2">
+              <label class="font-weight-bold text-monospace">First Name:</label>
+              <p>{{one.projectName}}</p>
+            </div>
+            <div class="col col-md-2">
+              <label class="font-weight-bold text-monospace">Last Name:</label>
+              <p>{{one.projectStartDate}}</p>
+            </div>
+            <div class="col col-md-2">
+              <label class="font-weight-bold text-monospace">Employee ID:</label>
+              <p>{{one.projectEndDate}}</p>
+            </div>
+            <div class="col col-md-3">
+              <label class="font-weight-bold text-monospace">Employee ID:</label>
+              <p>{{one.user?.firstName}}</p>
+            </div>
+            <div class="col col-md-3">
+              <button type="button" class="btn btn-primary" (click)="selectedproject(one)">Select</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="parentTask" class="text-left modal fade" id="modalparenttask" tabindex="-1" role="dialog" aria-labelledby="modalparenttask"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalparenttask">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row" *ngFor="let one of parentTask">
+            <div class="col col-md-3">
+              <label class="font-weight-bold text-monospace">First Name:</label>
+              <p>{{one.parentTaskName}}</p>
+            </div>
+            <div class="col col-md-3">
+              <button type="button" class="btn btn-primary" (click)="selectedparentTask(one)">Select</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group col-md-2">
+    <input type="text" class="form-control" placeholder="Search..." name="childTaskName" [(ngModel)]="userFilter.childTaskName">
+  </div>
+  <div class="form-group col-md-1">
+    <label>Sort:</label>
+  </div>
+
+  <div class="form-group col-md-2">
+    <button type="button" class="btn btn-outline-primary" [class.active]="order === 'taskStartDate'" (click)="setOrder('taskStartDate')">Start
+      Date</button>
+  </div>
+  <div class="form-group col-md-2">
+    <button type="button" class="btn btn-outline-primary" [class.active]="order === 'taskEndDate'" (click)="setOrder('taskEndDate')">End
+      Date</button>
+  </div>
+  <div class="form-group col-md-2">
+    <button type="button" class="btn btn-outline-primary" [class.active]="order === 'taskPriority'" (click)="setOrder('taskPriority')">Priority</button>
+  </div>
+  <div class="form-group col-md-2">
+    <button type="button" class="btn btn-outline-primary" [class.active]="order === 'taskStatus'" (click)="setOrder('taskStatus')">Task
+      Status</button>
+  </div>
+</div>
+<hr>
+
+<form>
+  <div class="row" *ngFor="let one of childTask | filterBy:userFilter | orderBy :order">
+    <div class="col col-md-1">
+      <label class="font-weight-bold text-monospace">Task Name:</label>
+      <p>{{one.childTaskName}}</p>
+    </div>
+    <div class="col col-md-2">
+      <label class="font-weight-bold text-monospace">Start Dtae:</label>
+      <p>{{one.taskStartDate}}</p>
+    </div>
+    <div class="col col-md-2">
+      <label class="font-weight-bold text-monospace">End Date:</label>
+      <p>{{one.taskEndDate}}</p>
+    </div>
+    <div class="col col-md-1">
+      <label class="font-weight-bold text-monospace">Priority:</label>
+      <p>{{one.taskPriority}}</p>
+    </div>
+    <div class="col col-md-1">
+        <label class="font-weight-bold text-monospace">Parent Task:</label>
+        <p>{{one.parent.parentTaskName}}</p>
+      </div>
+      <div class="col col-md-1">
+          <label class="font-weight-bold text-monospace">Project Name:</label>
+          <p>{{one.project.projectName}}</p>
+        </div>
+    <div class="col col-md-1">
+      <label class="font-weight-bold text-monospace">User:</label>
+      <p>{{one.user.firstName}}</p>
+    </div>
+    <div class="col col-md-1">
+      <button *ngIf=!one.taskStatus class="badge badge-primary" (click)="onClickUpdateTask(one)"> Edit</button>
+    </div>
+    <div class="col col-md-1">
+      <button class="badge badge-danger" (click)="SuspendChildTask(one.childTaskID)">Suspend</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,83 @@
+<div>
+  <h2 style="text-align: center">Add Task</h2>
+  <hr>
+  <form [formGroup]="addUserForm" (ngSubmit)="AddUser()">
+
+    <div class="form-group slidecontainer">
+      <label>First Name:</label>
+      <input mdInput type="text" formControlName="firstName" [ngClass]="{ 'is-invalid': submitted && usererror.firstName.errors }"
+        class="form-control slider" placeholder="Enter First Name">
+      <div *ngIf="submitted && usererror.firstName.errors" class="invalid-feedback">
+        <div *ngIf="usererror.firstName.errors.required">First Name is required</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Last Name:</label>
+      <input type="text" formControlName="lastName" [ngClass]="{ 'is-invalid': submitted && usererror.lastName.errors }"
+        class="form-control" placeholder="Enter Last Name">
+      <div *ngIf="submitted && usererror.lastName.errors" class="invalid-feedback">
+        <div *ngIf="usererror.lastName.errors.required">Last Name is required</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Employee ID</label>
+      <input type="number" formControlName="employeeID" [ngClass]="{ 'is-invalid': submitted && usererror.employeeID.errors }"
+        class="form-control" placeholder="Enter Employee ID">
+      <div *ngIf="submitted && usererror.employeeID.errors" class="invalid-feedback">
+        <div *ngIf="usererror.employeeID.errors.required">Employee ID is required</div>
+      </div>
+    </div>
+    <button *ngIf="!onClickIsUpdated" type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+    <button *ngIf="onClickIsUpdated" type="Update" class="btn btn-primary btn-lg btn-block">Update</button>
+    <button type="reset" class="btn btn-secondary btn-lg btn-block">Reset</button>
+  </form>
+</div>
+<br>
+<hr>
+<div class="form-row">
+  <div class="form-group col-md-4">
+    <input type="text" class="form-control" placeholder="Search..." name="firstName" [(ngModel)]="userFilter.firstName">
+  </div>
+  <div class="form-group col-md-2">
+    <label>Sort:</label>
+  </div>
+
+  <div class="form-group col-md-2">
+    <button type="button" class="btn btn-outline-primary" [class.active]="order === 'firstName'" (click)="setOrder('firstName')">First
+      Name</button>
+  </div>
+  <div class="form-group col-md-2">
+    <button type="button" class="btn btn-outline-primary" [class.active]="order === 'lastName'" (click)="setOrder('lastName')">Last
+      Name</button>
+  </div>
+  <div class="form-group col-md-2">
+    <button type="button" class="btn btn-outline-primary" [class.active]="order === 'employeeID'" (click)="setOrder('employeeID')">Employee
+      ID</button>
+  </div>
+</div>
+<hr>
+
+<form>
+
+  <div class="row" *ngFor="let one of actualUser | filterBy:userFilter | orderBy :order">
+    <div class="col col-md-3">
+      <label class="font-weight-bold text-monospace">First Name:</label>
+      <p>{{one.firstName}}</p>
+    </div>
+    <div class="col col-md-3">
+      <label class="font-weight-bold text-monospace">Parent Task:</label>
+      <p>{{one.lastName}}</p>
+    </div>
+    <div class="col col-md-3">
+      <label class="font-weight-bold text-monospace">Priority:</label>
+      <p>{{one.employeeID}}</p>
+    </div>
+    <div class="col col-md-1">
+      <button class="badge badge-primary" (click)="onClickUpdateUser(one)"> Edit</button>
+    </div>
+    <div class="col col-md-1">
+      <button class="badge badge-danger" (click)="deleteUser(one.userID)"> Delete</button>
+    </div>
+  </div>
+</form>
