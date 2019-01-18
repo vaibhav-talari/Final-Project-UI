@@ -47,7 +47,7 @@
             {{addTaskForm.value.parent?.parentTaskName}}
           </p>
         </div>
-        <div *ngIf=!onClickisUpdated class="col-auto my-1">
+        <div class="col-auto my-1">
           <input (click)="loadParentTasks()" *ngIf="!isDisabled" type="button" class="btn btn-primary" value="Search">
           <div class="redcolor form-group">
             <div *ngIf="addTaskForm.controls.parent.invalid">*Select Parent</div>
